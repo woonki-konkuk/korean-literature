@@ -62,6 +62,7 @@
   .chip.t-작품{color:#0a7d5a;background:#e3f6ee}
   .chip.t-내용{color:#0e6f80;background:#e0f4f7}
   .qtext{font-size:21px;font-weight:800;line-height:1.65;letter-spacing:-.3px;margin-bottom:6px;word-break:keep-all}
+  .qsub{font-size:13px;font-weight:800;color:var(--ink2);background:var(--brandsoft);display:inline-block;padding:6px 12px;border-radius:10px;margin:4px 0 14px}
   .qtext b{color:var(--ink2)}
   .qtext .blk{display:inline-block;min-width:80px;border-bottom:3px solid var(--brand);margin:0 3px;
     color:var(--brand);text-align:center;font-weight:900}
@@ -117,6 +118,42 @@
   .wrong-item .a s{color:var(--bad);text-decoration:line-through;opacity:.8}
   .footer{font-size:11px;color:#9bb3a7;text-align:center;margin-top:22px}
 
+  /* 홈 선택 */
+  .homechoice{display:block;width:100%;text-align:left;border:1.6px solid var(--line);background:#fff;border-radius:18px;padding:20px;margin-bottom:13px;cursor:pointer;font-family:inherit;transition:.15s}
+  .homechoice:hover{border-color:var(--brand);box-shadow:var(--shadow-sm)}
+  .homechoice:active{transform:translateY(1px)}
+  .homechoice .ic{font-size:30px;display:block}
+  .homechoice .h{font-size:18px;font-weight:800;color:var(--ink);display:block;margin-top:7px}
+  .homechoice .s{font-size:13px;color:var(--sub);font-weight:600;display:block;margin-top:3px}
+  .homechoice.accent{background:linear-gradient(135deg,#eafaf1,#f4fcf7);border-color:#9fe0bf}
+  /* 공부하기 */
+  .studyhead{font-size:15px;font-weight:800;color:var(--ink2);margin-bottom:12px}
+  .filterbar{display:flex;gap:7px;overflow-x:auto;padding-bottom:11px;margin-bottom:8px}
+  .filterbar::-webkit-scrollbar{display:none}
+  .filterbar .f{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--sub);cursor:pointer;white-space:nowrap;user-select:none}
+  .filterbar .f.on{border-color:var(--brand);background:var(--brandsoft);color:var(--ink2)}
+  .studycard{border:1px solid var(--line);border-radius:16px;padding:16px 17px;margin-bottom:13px;background:#fff;box-shadow:0 4px 14px rgba(16,121,80,.06)}
+  .studycard h3{font-size:19px;font-weight:800;margin:8px 0 2px;color:var(--ink)}
+  .studycard .era{font-size:12.5px;color:var(--ink2);font-weight:700;margin-bottom:11px}
+  .studycard .desc{font-size:14.5px;line-height:1.72;color:#2c4a3e;word-break:keep-all;margin-bottom:13px}
+  .studycard .wlabel{font-size:11.5px;font-weight:800;color:var(--ink2);background:var(--brandsoft);display:inline-block;padding:4px 10px;border-radius:999px;margin-bottom:7px}
+  .studycard ul{margin:0;padding:0;list-style:none}
+  .studycard li{font-size:14px;padding:6px 2px;border-bottom:1px dashed #eef3ef;word-break:keep-all;line-height:1.5}
+  .studycard li:last-child{border-bottom:none}
+  .studycard li .t{font-weight:700;color:var(--ink)}
+  .studycard li .a{color:var(--sub);font-weight:600}
+  /* 스와이프 덱 */
+  .decknav{display:flex;align-items:center;justify-content:center;gap:18px;margin:2px 0 10px}
+  .decknav #deckPos{font-size:13.5px;font-weight:800;color:var(--ink2);min-width:70px;text-align:center}
+  .navbtn{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--ink2);font-size:23px;font-weight:800;cursor:pointer;line-height:1;display:grid;place-items:center;padding:0}
+  .navbtn:active{background:var(--brandsoft);transform:scale(.94)}
+  .deck{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;height:clamp(340px,58vh,560px);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .deck::-webkit-scrollbar{display:none}
+  .slide{flex:0 0 100%;scroll-snap-align:center;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:1px 1px 4px}
+  .slide::-webkit-scrollbar{display:none}
+  .slide .studycard{margin-bottom:0}
+  .swipehint{text-align:center;font-size:12px;color:var(--sub);font-weight:600;margin-top:11px}
+
   @media (max-width:400px){
     body{padding:14px 10px 32px}
     .panel{padding:17px;border-radius:19px}
@@ -138,8 +175,36 @@
     <div class="ttl">국어 기말 빈칸 퀴즈<small>갈래별·시대별 한눈에 보기 · 고전＋현대 문학</small></div>
   </div>
 
+  <!-- ===== HOME ===== -->
+  <div id="home" class="panel">
+    <button class="homechoice accent" id="goStudy">
+      <span class="ic">📖</span>
+      <span class="h">공부하기</span>
+      <span class="s" id="studyCount">시대·갈래별 카드 내용을 먼저 익혀요</span>
+    </button>
+    <button class="homechoice" id="goQuiz">
+      <span class="ic">✏️</span>
+      <span class="h">문제 풀기</span>
+      <span class="s" id="quizCount">작품·작가·핵심 내용 빈칸 퀴즈</span>
+    </button>
+  </div>
+
+  <!-- ===== STUDY ===== -->
+  <div id="study" class="panel hide">
+    <div class="studyhead">📖 카드로 공부하기</div>
+    <div class="filterbar" id="studyFilter"></div>
+    <div class="decknav">
+      <button class="navbtn" id="deckPrev" aria-label="이전 카드">‹</button>
+      <span id="deckPos">1 / 33</span>
+      <button class="navbtn" id="deckNext" aria-label="다음 카드">›</button>
+    </div>
+    <div class="deck" id="studyDeck"></div>
+    <div class="swipehint">← 옆으로 쓸어 넘기거나 ‹ › 버튼을 누르세요 →</div>
+    <button class="homelink" id="studyHome">← 홈으로 가기</button>
+  </div>
+
   <!-- ===== SETUP ===== -->
-  <div id="setup" class="panel">
+  <div id="setup" class="panel hide">
     <h2 class="sec">① 학습 방식</h2>
     <div class="grid" id="modeGrid"></div>
     <h2 class="sec">② 범위 고르기</h2>
@@ -150,6 +215,7 @@
     <div class="row4" id="countGrid"></div>
     <button class="start" id="startBtn">시작하기 🌱</button>
     <div class="meta" id="poolInfo"></div>
+    <button class="homelink" id="setupHome">← 홈으로 가기</button>
   </div>
 
   <!-- ===== QUIZ ===== -->
@@ -191,12 +257,12 @@
     <div class="praise" id="praise"></div>
     <div class="btns">
       <button class="btn primary" id="retryWrong">틀린 문제만 다시 ↻</button>
-      <button class="btn ghost" id="home">처음으로</button>
+      <button class="btn ghost" id="resultHome">처음으로</button>
     </div>
     <div class="wronglist" id="wronglist"></div>
   </div>
 
-  <div class="footer">딸 기말고사 화이팅! 💚 · 작품명·작가명·핵심 내용 빈칸 채우기</div>
+  <div class="footer">작품명·작가명·핵심 내용 빈칸 채우기</div>
 </div>
 
 <script>
@@ -375,7 +441,7 @@ function buildPool(){
           seenAuthor.add(key);
           const acc=(accAuthor||[author]).map(norm);
           Q.push({type:'작가', cat:c.cat, ctx, html:'다음 작품을 지은 <b>작가</b>는?',
-                  target:'「'+title+'」', ans:author, acc, hint:ctx});
+                  target:'「'+title+'」', ans:author, acc, hint:ctx, sub:c.genre+' · '+c.era});
         }
       }
     }
@@ -387,8 +453,8 @@ function buildPool(){
     for(const author in byAuthor){
       const titles = byAuthor[author];
       Q.push({type:'작품', cat:c.cat, ctx,
-              html:'<b>'+author+'</b>의 <b>작품</b>을 한 가지 쓰시오.',
-              target:'분야: '+ctx, ans:titles[0], accDisp:titles, acc:titles.map(norm), hint:'작가: '+author});
+              html:'<b>'+author+'</b>의 작품을 한 가지 쓰시오.',
+              target:'', ans:titles[0], accDisp:titles, acc:titles.map(norm), hint:'작가: '+author, sub:c.genre+' · '+c.era});
     }
     for(const cc of (c.concepts||[])){
       Q.push({type:'내용', cat:c.cat, ctx, concept:true, text:cc.t, ans:cc.a,
@@ -397,7 +463,83 @@ function buildPool(){
   }
   return Q;
 }
+/* 핵심 내용 추가 문제 (더 풍성하게) */
+const MORE = {
+'고전 · 운문|조선 전기|악장':[{t:'대표적 악장으로 정도전의 「신도가」, 정인지 외의 「___」가 있다.', a:'용비어천가'}],
+'고전 · 운문|조선 전기|언해':[{t:'언해는 한글 ___과 백성 교화에 이바지하였다.', a:'보급'}],
+'고전 · 운문|조선 전기|시조':[{t:'조선 전기에 여러 수의 시조가 하나로 묶인 형태를 ___라 한다.', a:'연시조'},{t:'기녀들은 시조에서 주로 임에 대한 ___을 노래했다.', a:'사랑'}],
+'고전 · 운문|조선 전기|가사':[{t:'정극인의 「상춘곡」, 정철의 「사미인곡」이 속하는 갈래는 ___이다.', a:'가사'}],
+'고전 · 운문|조선 중·후기|시조':[{t:'윤선도는 「오우가」, 「___」 등에서 우리말의 아름다움을 살렸다.', a:'어부사시사'}],
+'고전 · 운문|조선 후기|가사':[{t:'조선 후기에 여행 경험을 적은 가사를 ___ 가사라 한다.', a:'기행'},{t:'조선 후기에 서민의 생활을 다룬 가사를 ___ 가사라 한다.', a:'서민'}],
+'고전 · 운문|조선 후기|시조':[{t:'전문 가객들이 시조를 모아 엮은 책을 ___(歌集)이라 한다.', a:'가집'},{t:'전문 가객들이 이룬 모임을 ___(歌壇)이라 한다.', a:'가단'}],
+'고전 · 산문|조선 전기|한문 소설':[{t:'인간의 심성을 의인화하여 갈등을 형성한 소설을 ___ 소설이라 한다.', a:'의인체'},{t:'「금오신화」처럼 초현실적·신비한 세계를 다룬 소설을 ___ 소설이라 한다.', a:'전기', acc:['전기','전기소설']}],
+'고전 · 산문|조선 중기|몽유록':[{t:'몽유록에서 서술자는 꿈에서 깬 뒤 ___로 돌아와 체험을 서술한다.', a:'현실'},{t:'임제의 대표적 몽유록 작품은 「___」이다.', a:'원생몽유록'}],
+'고전 · 산문|조선 후기|수필':[{t:'박지원이 청에 다녀온 경험을 적은 기행 수필은 「___」이다.', a:'열하일기'},{t:'혜경궁 홍씨가 궁중 생활을 기록한 한글 수필은 「___」이다.', a:'한중록'}],
+'고전 · 산문|조선 후기|소설':[{t:'조선 후기에 돈을 받고 책을 빌려주던 곳을 ___라 한다.', a:'세책가'},{t:'전쟁 영웅의 활약을 그린 소설을 ___ 소설이라 한다.', a:'군담'}],
+'고전 · 산문|조선 후기|실학파 문학':[{t:'실학파 문학은 모순된 사회 현실을 ___으로 비판하였다.', a:'사실적', acc:['사실적','사실적으로','사실']},{t:'실학파를 대표하는 두 인물은 박지원과 ___이다.', a:'박제가'}],
+'고전 · 산문|조선 후기|민속극·판소리':[{t:'「봉산 탈춤」, 「통영 오광대」가 속하는 갈래는 ___이다.', a:'민속극', acc:['민속극','탈춤']},{t:'민속극에는 탈춤과 ___극이 있다.', a:'인형'}],
+'현대 · 운문|개화기|개화 가사·신체시':[{t:'개화기 시가 양식에는 개화 가사, 창가, ___가 있다.', a:'신체시'},{t:'「해에게서 소년에게」를 지은 작가는 ___이다.', a:'최남선'}],
+'현대 · 운문|1910년대|시':[{t:'1910년대에는 개인의 내면을 그린 ___시가 자리 잡았다.', a:'서정'},{t:'1910년대에 정형성에서 벗어난 ___시 형식이 정착되었다.', a:'자유'}],
+'현대 · 운문|1920년대|시':[{t:'1920년대 한 흐름인 감상적 ___주의 시는 암담한 현실을 배경으로 한다.', a:'낭만'},{t:'민중을 중심에 둔 1920년대 시의 경향을 ___파라 한다.', a:'신경향'}],
+'현대 · 운문|1930년대~광복|시':[{t:'언어의 순수성을 중시한 1930년대 시 유파를 ___파라 한다.', a:'시문학'},{t:'서정주·유치환처럼 생명을 탐구한 시인들을 ___파라 한다.', a:'생명'}],
+'현대 · 운문|광복 직후|시':[{t:'광복 직후 문단은 극심한 ___ 대립을 겪었다.', a:'이념'}],
+'현대 · 운문|1950년대|시':[{t:'1950년대에는 전통 율격을 토대로 한 ___ 부흥 운동이 펼쳐졌다.', a:'시조'},{t:'1950년대 문학은 전쟁과 함께 ___ 현실의 문제를 다루었다.', a:'분단'}],
+'현대 · 운문|1960년대|시':[{t:'1960년대는 4·19와 5·16으로 이어지는 ___기를 배경으로 한다.', a:'격동'},{t:'「껍데기는 가라」를 지은 시인은 ___이다.', a:'신동엽'}],
+'현대 · 운문|1970년대|시':[{t:'1970년대 시는 산업화·___화로 인한 문제를 다루었다.', a:'도시'},{t:'신경림의 「농무」는 ___의 현실을 다룬 시이다.', a:'농촌', acc:['농촌','농민','민중']}],
+'현대 · 운문|1980년대|시':[{t:'박노해의 「노동의 새벽」은 ___ 현실을 다룬 시이다.', a:'노동'},{t:'1980년대에는 기존 시 형식을 벗어난 형식 ___도 활발했다.', a:'실험'}],
+'현대 · 운문|1990년대 이후|시':[{t:'1990년대 이후 시는 환경·___에 관심을 두기도 했다.', a:'생태'},{t:'1990년대 이후 ___ 작가들의 활동이 크게 확대되었다.', a:'여성'}],
+'현대 · 산문|개화기|신소설·희곡':[{t:'신소설은 봉건 질서 타파, 개화·계몽, ___ 사상을 담았다.', a:'자주독립', acc:['자주독립','자주 독립','독립']},{t:'이인직의 「혈의 누」가 속하는 갈래는 ___이다.', a:'신소설'}],
+'현대 · 산문|1910년대|소설·희곡':[{t:'「무정」은 자유연애와 ___주의 사상을 고취하였다.', a:'민족'},{t:'이광수는 「무정」에서 ___ 문장을 확립하고자 했다.', a:'구어체'}],
+'현대 · 산문|1920년대|소설·희곡':[{t:'현진건의 「운수 좋은 날」은 ___주의 소설이다.', a:'사실'},{t:'후반기에 궁핍한 농민·노동자를 다룬 소설을 ___ 소설이라 한다.', a:'경향'}],
+'현대 · 산문|1930년대~광복|소설·희곡·수필':[{t:'1940년대에는 일제가 ___ 사용을 금지하였다.', a:'우리말', acc:['우리말','한글','국어']},{t:'염상섭의 「삼대」, 채만식의 「태평천하」는 ___사 소설이다.', a:'가족'}],
+'현대 · 산문|광복 직후|소설·희곡·수필':[{t:'광복 직후에는 일제 강점기를 반성·___하려는 작품이 창작되었다.', a:'승화'}],
+'현대 · 산문|1950년대|소설·희곡·수필':[{t:'손창섭의 「비 오는 날」, 이범선의 「오발탄」 같은 소설을 ___ 소설이라 한다.', a:'전후', acc:['전후','전후소설']}],
+'현대 · 산문|1960년대|소설·희곡·수필':[{t:'최인훈의 「광장」은 남북 ___의 비극을 다룬다.', a:'분단'},{t:'김승옥의 「서울, 1964년 겨울」은 현대인의 ___를 그린다.', a:'소외'}],
+'현대 · 산문|1970년대|소설·희곡·수필':[{t:'조세희의 「난쟁이가 쏘아 올린 작은 공」은 도시 ___의 현실을 다룬다.', a:'빈민', acc:['빈민','하층민']}],
+'현대 · 산문|1980년대|소설·희곡':[{t:'조정래의 「태백산맥」처럼 여러 권에 걸친 긴 소설을 ___소설이라 한다.', a:'대하', acc:['대하','대하소설']},{t:'이문열의 「___」는 1980년대 대표 소설이다.', a:'우리들의 일그러진 영웅'}],
+'현대 · 산문|1990년대 이후|소설·희곡':[{t:'2000년대 이후 인터넷에 연재하는 소설을 인터넷 ___이라 한다.', a:'연재소설', acc:['연재소설','연재 소설']}],
+};
+DATA.forEach(c=>{ const m=MORE[c.cat+'|'+c.era+'|'+c.genre]; if(m) c.concepts=(c.concepts||[]).concat(m); });
+
 const ALLPOOL = buildPool();
+
+/* 카드별 학습 설명 (공부하기 메뉴용) */
+const DESC = {
+'고전 · 운문|조선 전기|악장':'조선 전기 궁중의 여러 의식과 행사에 쓰인 노래다. 주로 조선 왕조 개국의 정당성을 밝히고 나라의 번영을 송축하는 내용을 담았다.',
+'고전 · 운문|조선 전기|언해':'훈민정음 창제 이후, 한문으로 된 유교·불교 경전이나 문학 등의 문헌을 우리글(한글)로 번역한 것을 이른다. 한글 보급과 백성 교화에 이바지했다.',
+'고전 · 운문|조선 전기|시조':'간결하고 절제된 형식의 시조는 사대부층의 미의식과 부합하여 문학의 주요 갈래로 자리 잡았다. 왕조 교체기에는 유교적 충(忠)을, 점차 자연 예찬과 유교 윤리로 내용을 넓히며 연시조 형태도 나타났다. 기녀들도 시조를 지어 주로 임에 대한 사랑을 노래했다.',
+'고전 · 운문|조선 전기|가사':'행수에 제한이 없는 4음보 연속체 시가다. 짧은 시조에 담기 어려운 길고 복잡한 정서나 경험을 표현할 수 있어 사대부층이 즐겨 지었다. 주로 자연 친화나 임금에 대한 그리움(연군)을 노래했다.',
+'고전 · 운문|조선 중·후기|시조':'송순·윤선도 등 사대부들이 자연 속의 삶과 흥취를 노래한 시조다. 특히 윤선도는 「오우가」, 「어부사시사」 등에서 우리말의 아름다움을 뛰어나게 살려 냈다.',
+'고전 · 운문|조선 후기|가사':'사대부의 가사 창작은 줄고, 여성들의 삶의 애환을 담은 규방 가사, 서민들의 생활을 다룬 서민 가사, 여행 경험을 적은 기행 가사 등이 성행했다.',
+'고전 · 운문|조선 후기|시조':'김천택·김수장·안민영 등 전문 가객이 등장해 가단(歌壇)을 이루고 시조를 모아 가집(歌集)을 펴냈다. 작가층이 평민과 여성으로 넓어지면서 형식이 자유로운 사설시조가 활발히 창작되었다.',
+'고전 · 산문|조선 전기|한문 소설':'조선 전기에 나타난 한문으로 쓰인 소설로, 고전 소설의 시작이다. 초현실적이고 신비한 세계를 다룬 전기적(傳奇的) 내용이 많았다. 사물이 아닌 인간의 심성을 의인화한 의인체 소설도 창작되었다.',
+'고전 · 산문|조선 중기|몽유록':'꿈속에서 일어난 사건을 내용으로 하는 작품이다. 서술자가 꿈속에서 일을 겪은 뒤 현실로 돌아와 그 체험을 서술하며, 작가의 이상과 현실 비판 의식을 드러냈다.',
+'고전 · 산문|조선 후기|수필':'사회 변동에 따라 개인의 체험이나 역사적 사실을 다룬 일기·기행문 등의 수필이 발달했다. 한글로 섬세하고 우아하게 표현한 궁녀와 사대부 여성의 수필도 두드러졌다.',
+'고전 · 산문|조선 후기|소설':'한글이 널리 보급되고 세책가·전기수 등을 통해 유통이 확대되면서 사대부 여성과 평민도 소설을 즐겼다. 「홍길동전」을 비롯한 한글 소설이 창작되었고 영웅·군담·가문·판소리계 소설 등이 등장했다.',
+'고전 · 산문|조선 후기|실학파 문학':'박지원·박제가 등 실학파를 중심으로 모순된 사회 현실을 사실적으로 비판하는 문학이 나타났다.',
+'고전 · 산문|조선 후기|민속극·판소리':'상업 발달과 공연 예술의 활성화로 발달했다. 둘 다 해학과 풍자를 바탕으로 서민의 의식과 세계를 그려 냈다. 민속극에는 탈춤·인형극이, 판소리에는 춘향가·흥부가·심청가 등이 있다.',
+'현대 · 운문|개화기|개화 가사·신체시':'개항과 함께 서양 문물이 들어오며 근대로 이행하던 시기로, 고전 시가와 근대시 양식이 공존했다. 개화 가사, 창가, 신체시 등이 등장했으며, 신체시는 정형시의 율격에서 벗어나려 했으나 자유시에는 이르지 못했다.',
+'현대 · 운문|1910년대|시':'신체시 같은 계몽적 교술시에서 벗어나 개인의 내면을 그린 서정시가 자리 잡고, 자유시 형식이 시도·정착되었다. 최초의 순수 문예 동인지 「창조」가 창간되어 근대 문학 발전에 이바지했다.',
+'현대 · 운문|1920년대|시':'조국을 잃은 암담한 현실과 서구 상징주의의 영향으로 감상적 낭만주의 시가, 또 민중을 중심에 둔 신경향파 시가 나타났다. 프롤레타리아 문학 단체 「카프」가 결성되었고, 한용운과 김소월은 독자적인 시 세계를 펼쳤다.',
+'현대 · 운문|1930년대~광복|시':'본격적인 현대시가 출현하며 경향이 다양해졌다. 순수성을 추구한 시문학파, 이미지즘·초현실주의의 모더니즘, 생명을 탐구한 생명파, 향토적 자연을 노래한 청록파가 있었고, 백석은 공동체 의식을, 이육사·윤동주는 지식인의 양심을 시로 담았다.',
+'현대 · 운문|광복 직후|시':'광복 후 극심한 이념 대립이 문단에도 이어졌다. 청록파의 합동 시집 「청록집」, 윤동주의 유고 시집 「하늘과 바람과 별과 시」 등이 발표되었다.',
+'현대 · 운문|1950년대|시':'6·25 전쟁의 비극적 체험과 전후의 혼란, 분단 현실을 주로 다루었다. 전통적 율격과 정서를 토대로 한 시조 부흥 운동과 모더니즘 계열의 주지시도 나타났다.',
+'현대 · 운문|1960년대|시':'4·19에서 5·16으로 이어지는 격동기를 겪으며, 부조리한 현실에 적극적으로 목소리를 낸 현실 참여시와 인간 본질의 순수를 추구한 순수시로 나뉘었다.',
+'현대 · 운문|1970년대|시':'산업화·도시화로 인한 농촌 공동체의 붕괴, 열악한 노동 환경, 민주화에 대한 열망 속에서 노동자·농민·도시 하층민 등 민중의 소외된 현실을 고발하고 그 개선을 모색했다.',
+'현대 · 운문|1980년대|시':'민주화에 대한 열망이 이어지며 시대 상황을 비판하거나 풍자하는 시가 많았다. 기존 형식을 벗어난 형식 실험도 활발했다.',
+'현대 · 운문|1990년대 이후|시':'정치적 관심보다 개인의 일상과 내면에 주목했고, 환경·생태에 관심을 두는 경향이 나타났다. 여성 작가들의 활동도 크게 확대되었다.',
+'현대 · 산문|개화기|신소설·희곡':'대표적 서사 문학은 신소설이다. 봉건 질서의 타파, 개화·계몽, 자주독립 사상을 주로 담았다. 판소리를 근간으로 한 창극도 인기를 끌었다.',
+'현대 · 산문|1910년대|소설·희곡':'1917년 이광수의 「무정」으로 본격적인 근대 소설이 시작되었다. 자유연애와 민족주의 사상을 고취하고 구어체 문장을 확립하고자 했다. 근대극도 시도되었으나 일제의 검열로 성과는 크지 않았다.',
+'현대 · 산문|1920년대|소설·희곡':'어두운 사회 현실을 비판적으로 묘사한 사실주의 소설이 주류를 이루었고, 유미주의적 낭만주의 소설도 유행했다. 후반기에는 궁핍한 농민·노동자를 다룬 경향 소설이 창작되었다. 극예술협회(김우진)와 토월회(박승희)가 현대극 정립에 힘썼다.',
+'현대 · 산문|1930년대~광복|소설·희곡·수필':'일제의 억압이 심해지며 모더니즘 소설, 농촌·농민 소설, 역사 소설, 가족사 소설 등이 창작되었다. 1940년대에는 우리말 사용이 금지되었다. 극예술연구회의 활동으로 극문학이 크게 발전했고, 수필도 독자적 갈래로 자리 잡았다.',
+'현대 · 산문|광복 직후|소설·희곡·수필':'일제 강점기를 반성·승화하려는 자기반성적 작품과 순수 문학을 지향한 작품, 광복 후의 사회 현실과 인간의 삶을 다룬 작품들이 발표되었다.',
+'현대 · 산문|1950년대|소설·희곡·수필':'전쟁으로 인간성을 잃거나 무기력해진 인물을 통해 부조리한 현실을 고발하고 인간의 실존을 탐구했다. 전쟁의 비극을 그리면서도 인간애를 잃지 않으려는 작품도 있었다.',
+'현대 · 산문|1960년대|소설·희곡·수필':'남북 분단의 비극을 정면으로 다루며 분단 역사에 대한 인식이 깊어졌다. 사회의 부조리나 현대인의 소외·방황을 감각적인 문체로 표현한 작품도 나왔다.',
+'현대 · 산문|1970년대|소설·희곡·수필':'노동자의 투쟁과 도시 빈민의 삶을 사실적으로 반영했다. 극문학에서는 기법의 혁신과 전통의 현대적 수용을 꾀한 실험적 연극이 시도되었다.',
+'현대 · 산문|1980년대|소설·희곡':'억압적인 사회 현실을 고발하는 작품과 대하소설이 많이 발표되었다. 섬세한 서정성을 갖춘 여성 작가들이 등장했고, 마당극을 계승한 공연과 뮤지컬이 발전했다.',
+'현대 · 산문|1990년대 이후|소설·희곡':'개인의 일상에 관심을 두며 주제와 내용이 다양해졌다. 운동권 이야기를 돌아보는 후일담 문학이 형성되었고, 2000년대 이후에는 인터넷 연재소설 등 새로운 창작 방식이 등장했다.',
+};
+DATA.forEach(c=>{ c.desc = DESC[c.cat+'|'+c.era+'|'+c.genre] || ''; });
 
 /* ============================================================
    설정 UI
@@ -489,9 +631,7 @@ function startQuiz(pool){
   const n = sel.count===999?list.length:Math.min(sel.count,list.length);
   queue=list.slice(0,n);
   idx=0; score=0; wrongs=[]; streak=0; bestStreak=0;
-  document.getElementById('setup').classList.add('hide');
-  document.getElementById('result').classList.add('hide');
-  document.getElementById('quiz').classList.remove('hide');
+  showOnly('quiz');
   showQ();
 }
 
@@ -521,9 +661,10 @@ function showQ(){
       : '<span class="blk">&nbsp;?&nbsp;</span>';
     body.innerHTML='<div class="qtext">'+q.text.replace('___',mark)+'</div>';
   }else{
-    let ab='<div class="answer-box">'+q.target+'</div>';
-    if(isReveal) ab+='<div class="answer-box reveal-target" id="rt" style="margin-top:10px">👆 눌러서 정답 보기</div>';
-    body.innerHTML='<div class="qtext">'+q.html+'</div>'+ab;
+    const sub = q.sub ? '<div class="qsub">갈래 · 시대 — '+esc(q.sub)+'</div>' : '';
+    let cue = (q.type==='작가' && q.target) ? '<div class="answer-box">'+q.target+'</div>' : '';
+    if(isReveal) cue += '<div class="answer-box reveal-target" id="rt"'+(cue?' style="margin-top:10px"':'')+'>👆 눌러서 정답 보기</div>';
+    body.innerHTML='<div class="qtext">'+q.html+'</div>'+sub+cue;
   }
 
   if(isReveal){
@@ -639,7 +780,7 @@ function burst(){
 /* --- 결과 --- */
 function showResult(){
   $('prog').style.width='100%';
-  hideAll('quiz'); showAll('result');
+  showOnly('result');
   const total=queue.length, pct=Math.round(score/total*100);
   $('pct').textContent=pct+'%';
   $('rsub').textContent=total+'문제 중 '+score+'개 정답';
@@ -670,6 +811,49 @@ function showResult(){
 function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 /* ============================================================
+   공부하기 (카드 내용 보기)
+   ============================================================ */
+let studyCat='전체', studyCards=[], studyIdx=0;
+function renderStudy(){
+  const fb=$('studyFilter'); fb.innerHTML='';
+  CATS.forEach(c=>{
+    const cnt=(c.k==='전체'?DATA.length:DATA.filter(d=>d.cat===c.k).length);
+    const el=document.createElement('div'); el.className='f'+(studyCat===c.k?' on':'');
+    el.textContent=c.label+' '+cnt;
+    el.onclick=()=>{ studyCat=c.k; renderStudy(); };
+    fb.appendChild(el);
+  });
+  studyCards=DATA.filter(d=>studyCat==='전체'||d.cat===studyCat);
+  $('studyDeck').innerHTML=studyCards.map(c=>'<div class="slide">'+studyCardHtml(c)+'</div>').join('');
+  $('studyDeck').scrollLeft=0; studyIdx=0; updateDeckPos();
+}
+function updateDeckPos(){
+  const deck=$('studyDeck'), w=deck.clientWidth||1;
+  studyIdx=Math.max(0, Math.round(deck.scrollLeft/w));
+  $('deckPos').textContent=Math.min(studyIdx+1, studyCards.length)+' / '+studyCards.length;
+}
+function scrollDeck(d){
+  const deck=$('studyDeck'), w=deck.clientWidth;
+  const ni=Math.min(Math.max(studyIdx+d,0), studyCards.length-1);
+  deck.scrollTo({left:ni*w, behavior:'smooth'});
+}
+function studyCardHtml(c){
+  const works=c.works.map(w=>{
+    const t=esc(w[0]); const a=w[1]?esc(w[1]):'작자 미상';
+    return '<li><span class="t">'+t+'</span> <span class="a">· '+a+'</span></li>';
+  }).join('');
+  return '<div class="studycard">'
+    +'<span class="chip">'+esc(c.cat)+'</span>'
+    +'<h3>'+esc(c.genre)+'</h3>'
+    +'<div class="era">'+esc(c.era)+'</div>'
+    +(c.desc?'<div class="desc">'+esc(c.desc)+'</div>':'')
+    +'<div class="wlabel">주요 작품 '+c.works.length+'</div>'
+    +'<ul>'+works+'</ul></div>';
+}
+function showOnly(id){ ['home','study','setup','quiz','result'].forEach(x=>$(x).classList.add('hide')); $(id).classList.remove('hide'); }
+function showHome(){ showOnly('home'); window.scrollTo(0,0); }
+
+/* ============================================================
    이벤트
    ============================================================ */
 $('startBtn').onclick=()=>{
@@ -690,11 +874,20 @@ $('hintBtn').onclick=function(){ this.textContent='💡 '+queue[idx].hint; };
 $('retryWrong').onclick=()=>{
   if(!wrongs.length){ goHome(); return; }
   queue=shuffle(wrongs.map(w=>w.q)); idx=0; score=0; wrongs=[]; streak=0; bestStreak=0;
-  hideAll('result'); showAll('quiz'); showQ();
+  showOnly('quiz'); showQ();
 };
-function goHome(){ hideAll('result','quiz'); showAll('setup'); renderSetup(); }
-$('home').onclick=goHome;
+$('studyCount').textContent='시대·갈래별 카드 내용을 먼저 익혀요 · '+DATA.length+'장';
+$('quizCount').textContent='작품·작가·핵심 내용 빈칸 퀴즈 · '+ALLPOOL.length+'문항';
+function goHome(){ showHome(); }
+$('resultHome').onclick=goHome;
 $('quizHome').onclick=goHome;
+$('goStudy').onclick=()=>{ showOnly('study'); renderStudy(); window.scrollTo(0,0); };
+$('goQuiz').onclick=()=>{ showOnly('setup'); renderSetup(); window.scrollTo(0,0); };
+$('studyHome').onclick=showHome;
+$('setupHome').onclick=showHome;
+$('deckPrev').onclick=()=>scrollDeck(-1);
+$('deckNext').onclick=()=>scrollDeck(1);
+$('studyDeck').addEventListener('scroll', ()=>updateDeckPos(), {passive:true});
 
 renderSetup();
 </script>
