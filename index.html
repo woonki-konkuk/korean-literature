@@ -61,6 +61,16 @@
   .chip.t-작가{color:#9a6200;background:#fff2d6}
   .chip.t-작품{color:#0a7d5a;background:#e3f6ee}
   .chip.t-내용{color:#0e6f80;background:#e0f4f7}
+  .chip.t-빈칸채우기{color:#0e6f80;background:#e0f4f7}
+  /* 빈칸 채우기(클로즈) */
+  .clozehead{font-size:19px;font-weight:800;color:var(--ink);margin:2px 0 2px}
+  .clozehead span{font-size:14px;font-weight:700;color:var(--ink2)}
+  .clozehint{font-size:12.5px;font-weight:700;color:var(--ink2);background:var(--brandsoft);display:inline-block;padding:6px 12px;border-radius:10px;margin:8px 0 16px}
+  .clozebody{font-size:16.5px;line-height:2.15;color:#2c4a3e;word-break:keep-all}
+  .cloze{display:inline-block;min-width:30px;padding:1px 9px;margin:0 2px;border-radius:8px;background:var(--brandsoft);border:1.6px dashed var(--brand);color:transparent;cursor:pointer;font-weight:800;line-height:1.6;user-select:none;transition:.12s}
+  .cloze:hover{background:#d3f1e1}
+  .cloze:active{transform:scale(.96)}
+  .cloze.open{color:var(--ink2);border-style:solid;border-color:var(--ok);background:var(--okbg);cursor:default}
   .qtext{font-size:21px;font-weight:800;line-height:1.65;letter-spacing:-.3px;margin-bottom:6px;word-break:keep-all}
   .qsub{font-size:13px;font-weight:800;color:var(--ink2);background:var(--brandsoft);display:inline-block;padding:6px 12px;border-radius:10px;margin:4px 0 14px}
   .qtext b{color:var(--ink2)}
@@ -246,6 +256,7 @@
       <button class="btn good" id="gradeGood">😊 맞혔어요!</button>
     </div>
     <button class="btn primary full hide" id="nextBtn" style="margin-top:13px">다음 →</button>
+    <button class="btn ghost full hide" id="reclozeBtn" style="margin-top:10px">↻ 다른 빈칸으로</button>
     <button class="homelink" id="quizHome">← 홈으로 가기</button>
   </div>
 
@@ -456,9 +467,8 @@ function buildPool(){
               html:'<b>'+author+'</b>의 작품을 한 가지 쓰시오.',
               target:'', ans:titles[0], accDisp:titles, acc:titles.map(norm), hint:'작가: '+author, sub:c.genre+' · '+c.era});
     }
-    for(const cc of (c.concepts||[])){
-      Q.push({type:'내용', cat:c.cat, ctx, concept:true, text:cc.t, ans:cc.a,
-              acc:(cc.acc||[cc.a]).map(norm), hint:ctx});
+    if(c.desc && c.keys && c.keys.length>=2){
+      Q.push({type:'빈칸채우기', cat:c.cat, ctx, genre:c.genre, era:c.era, desc:c.desc, keys:c.keys.slice()});
     }
   }
   return Q;
@@ -501,9 +511,7 @@ const MORE = {
 };
 DATA.forEach(c=>{ const m=MORE[c.cat+'|'+c.era+'|'+c.genre]; if(m) c.concepts=(c.concepts||[]).concat(m); });
 
-const ALLPOOL = buildPool();
-
-/* 카드별 학습 설명 (공부하기 메뉴용) */
+/* 카드별 학습 설명 + 빈칸 채우기 핵심어 */
 const DESC = {
 '고전 · 운문|조선 전기|악장':'조선 전기 궁중의 여러 의식과 행사에 쓰인 노래다. 주로 조선 왕조 개국의 정당성을 밝히고, 번영을 송축하는 내용이다.',
 '고전 · 운문|조선 전기|언해':'훈민정음 창제 이후 한문으로 전하던 유학과 불교의 경전, 문학 작품 등의 문헌을 조정에서 한글로 번역한 것, 또는 그런 책을 이른다. 언해의 확대는 한글 보급을 통한 문자 생활의 확장과 문화·학문의 발달을 가져왔다.',
@@ -539,7 +547,43 @@ const DESC = {
 '현대 · 산문|1980년대|소설·희곡':'억압적인 사회 현실을 고발하는 작품과 대하소설이 많이 발표되었다. 섬세한 서정성을 갖춘 여성 작가들이 등장했고, 마당극을 계승한 공연과 뮤지컬이 발전했다.',
 '현대 · 산문|1990년대 이후|소설·희곡':'개인의 일상에 관심을 두며 주제와 내용이 다양해졌다. 운동권 이야기를 돌아보는 후일담 문학이 형성되었고, 2000년대 이후에는 인터넷 연재소설 등 새로운 창작 방식이 등장했다.',
 };
-DATA.forEach(c=>{ c.desc = DESC[c.cat+'|'+c.era+'|'+c.genre] || ''; });
+/* 빈칸 채우기에서 빈칸이 될 수 있는 핵심어 (모두 설명문에 실제로 나오는 단어) */
+const KEYS = {
+'고전 · 운문|조선 전기|악장':['궁중','의식','행사','정당성','번영'],
+'고전 · 운문|조선 전기|언해':['훈민정음','유학','불교','한글','보급','문자 생활'],
+'고전 · 운문|조선 전기|시조':['사대부층','우국충절','자연 예찬','유교 윤리','연시조','기녀','사랑'],
+'고전 · 운문|조선 전기|가사':['4음보','시조','사대부','자연 친화','그리움'],
+'고전 · 운문|조선 후기|가사':['규방 가사','서민 가사','애환'],
+'고전 · 운문|조선 후기|시조':['김천택','가객','가단','가집','평민','사설시조'],
+'고전 · 산문|조선 전기|한문 소설':['한문','고전 소설','전기적','심성','의인체'],
+'고전 · 산문|조선 중기|몽유록':['꿈속','서술자','현실','이상','비판 의식'],
+'고전 · 산문|조선 후기|수필':['체험','역사적 사실','일기','기행문','한글','궁녀'],
+'고전 · 산문|조선 후기|소설':['한글','세책가','전기수','평민','홍길동전','군담'],
+'고전 · 산문|조선 후기|실학파 문학':['박지원','박제가','정약용','실학파','허위 의식','사실적'],
+'고전 · 산문|조선 후기|민속극·판소리':['상업','공연 예술','민속극','판소리','해학','풍자'],
+'현대 · 운문|개화기|개화 가사·신체시':['개항','근대','개화 가사','창가','신체시','자유시'],
+'현대 · 운문|1910년대|시':['서정시','자유시','동인지','창조'],
+'현대 · 운문|1920년대|시':['프랑스 상징주의','낭만주의','신경향파','카프','프롤레타리아','한용운','김소월'],
+'현대 · 운문|1930년대~광복|시':['시문학파','모더니즘','생명파','청록파','백석'],
+'현대 · 운문|광복 직후|시':['이념','청록집','하늘과 바람과 별과 시','윤동주','이육사'],
+'현대 · 운문|1950년대|시':['6·25','분단','시조 부흥 운동','주지시'],
+'현대 · 운문|1960년대|시':['4·19','5·16','격동기','참여시','순수시'],
+'현대 · 운문|1970년대|시':['산업화','농촌 공동체','민주화','민중','소외'],
+'현대 · 운문|1980년대|시':['민주화','비판','풍자','형식 실험'],
+'현대 · 운문|1990년대 이후|시':['일상','내면','환경','생태','여성 작가'],
+'현대 · 산문|개화기|신소설·희곡':['신소설','봉건 질서','자주독립','창극'],
+'현대 · 산문|1910년대|소설·희곡':['이광수','무정','자유연애','민족주의','구어체','검열'],
+'현대 · 산문|1920년대|소설·희곡':['사실주의','유미주의','경향 소설','극예술협회','김우진','토월회','박승희'],
+'현대 · 산문|1930년대~광복|소설·희곡·수필':['모더니즘','가족사 소설','우리말','극예술연구회','수필'],
+'현대 · 산문|광복 직후|소설·희곡·수필':['반성','승화','자기반성적','순수 문학'],
+'현대 · 산문|1950년대|소설·희곡·수필':['인간성','부조리','실존','인간애'],
+'현대 · 산문|1960년대|소설·희곡·수필':['분단','부조리','소외','감각적'],
+'현대 · 산문|1970년대|소설·희곡·수필':['노동자','도시 빈민','혁신','실험적 연극'],
+'현대 · 산문|1980년대|소설·희곡':['대하소설','서정성','여성 작가','마당극','뮤지컬'],
+'현대 · 산문|1990년대 이후|소설·희곡':['일상','후일담','인터넷 연재소설'],
+};
+DATA.forEach(c=>{ const k=c.cat+'|'+c.era+'|'+c.genre; c.desc=DESC[k]||''; c.keys=(KEYS[k]||[]).filter(t=>c.desc.includes(t)); });
+const ALLPOOL = buildPool();
 
 /* ============================================================
    설정 UI
@@ -559,7 +603,7 @@ const TYPES = [
   {k:'전체', label:'전체 섞기'},
   {k:'작가', label:'작가명'},
   {k:'작품', label:'작품명'},
-  {k:'내용', label:'핵심 내용'},
+  {k:'빈칸채우기', label:'빈칸 채우기'},
 ];
 const COUNTS = [10,20,40,999];
 let sel = {mode:'type', cat:'전체', type:'전체', count:20};
@@ -620,12 +664,12 @@ function praiseMsg(){
 function startQuiz(pool){
   let list;
   if(sel.type==='전체'){
-    const buckets={작가:[],작품:[],내용:[]};
+    const buckets={작가:[],작품:[],빈칸채우기:[]};
     pool.forEach(q=>buckets[q.type].push(q));
     Object.values(buckets).forEach(shuffle);
     list=[]; let more=true;
     while(more){ more=false;
-      for(const k of ['내용','작품','작가']){ if(buckets[k].length){list.push(buckets[k].shift()); more=true;} }
+      for(const k of ['빈칸채우기','작품','작가']){ if(buckets[k].length){list.push(buckets[k].shift()); more=true;} }
     }
   } else { list=shuffle(pool.slice()); }
   const n = sel.count===999?list.length:Math.min(sel.count,list.length);
@@ -650,7 +694,9 @@ function showQ(){
 
   // reset shared
   $('fb').className='fb';
-  hideAll('field','hintBtn','revealBtn','typeBtns','gradeBtns','nextBtn');
+  hideAll('field','hintBtn','revealBtn','typeBtns','gradeBtns','nextBtn','reclozeBtn');
+
+  if(q.type==='빈칸채우기'){ renderCloze(q); return; }
 
   const body=$('qbody');
   const isReveal = sel.mode==='reveal';
@@ -681,6 +727,33 @@ function showQ(){
     $('goBtn').textContent='확인';
     setTimeout(()=>f.focus(),60);
   }
+}
+
+/* --- 빈칸 채우기(카드 클로즈) --- */
+function clozeHtml(desc, picks){
+  let s=desc; const map=[];
+  picks.slice().sort((a,b)=>b.length-a.length).forEach(term=>{
+    const i=s.indexOf(term);
+    if(i>=0){ const id=map.length; map.push(term); s=s.slice(0,i)+'@@'+id+'@@'+s.slice(i+term.length); }
+  });
+  s=esc(s);
+  return s.replace(/@@(\d+)@@/g,(m,id)=>{
+    const t=map[+id]; const w=Math.max(2,Math.min(t.length,7));
+    return '<span class="cloze" data-ans="'+esc(t)+'">'+'＿'.repeat(w)+'</span>';
+  });
+}
+function renderCloze(q){
+  const keys=q.keys.slice();
+  const n=Math.min(keys.length, Math.max(2, Math.round(keys.length*0.55)));
+  const picks=shuffle(keys).slice(0,n);
+  $('qbody').innerHTML=
+     '<div class="clozehead">'+esc(q.genre)+' <span>· '+esc(q.era)+'</span></div>'
+    +'<div class="clozehint">초록 빈칸을 누르면 답이 나와요 · '+picks.length+'칸</div>'
+    +'<div class="clozebody">'+clozeHtml(q.desc, picks)+'</div>';
+  $('qbody').querySelectorAll('.cloze').forEach(el=>{
+    el.onclick=()=>{ el.classList.add('open'); el.textContent=el.dataset.ans; };
+  });
+  showAll('reclozeBtn'); toNext();
 }
 
 function extraHtml(q){
@@ -781,7 +854,16 @@ function burst(){
 function showResult(){
   $('prog').style.width='100%';
   showOnly('result');
-  const total=queue.length, pct=Math.round(score/total*100);
+  const total=queue.length;
+  if(queue.filter(q=>q.type!=='빈칸채우기').length===0){
+    $('pct').textContent='🎉';
+    $('rsub').textContent='빈칸 채우기 '+total+'장 학습 완료!';
+    $('rstreak').textContent='';
+    $('praise').textContent='수고했어요! 다시 하면 빈칸이 새로 바뀌어요. 🌱';
+    $('wronglist').innerHTML='';
+    return;
+  }
+  const pct=Math.round(score/total*100);
   $('pct').textContent=pct+'%';
   $('rsub').textContent=total+'문제 중 '+score+'개 정답';
   $('rstreak').textContent = bestStreak>=3 ? ('🔥 최고 '+bestStreak+'연속 정답!') : '';
@@ -867,6 +949,7 @@ $('revealBtn').onclick=doReveal;
 $('gradeGood').onclick=()=>selfGrade(true);
 $('gradeBad').onclick=()=>selfGrade(false);
 $('nextBtn').onclick=next;
+$('reclozeBtn').onclick=()=>showQ();
 $('field').addEventListener('keydown',e=>{
   if(e.key==='Enter' && !e.isComposing){ e.preventDefault(); if(!answered) check(false); else next(); }
 });
