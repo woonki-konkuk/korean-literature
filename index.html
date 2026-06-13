@@ -97,6 +97,8 @@
   .fb .ans{font-weight:900}
   .fb .extra{display:block;font-weight:600;color:var(--sub);font-size:12.5px;margin-top:6px}
   .hintbtn{background:none;border:none;color:var(--brand);font-weight:800;font-size:13px;cursor:pointer;padding:6px 2px;margin-top:6px}
+  .homelink{display:block;width:100%;margin-top:16px;background:none;border:none;color:var(--sub);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;padding:9px;text-align:center;border-top:1px solid var(--line)}
+  .homelink:hover{color:var(--ink2)}
   /* emoji burst */
   .emoji{position:absolute;top:120px;font-size:26px;pointer-events:none;z-index:6;animation:floatUp 1.05s ease forwards}
   @keyframes floatUp{0%{opacity:0;transform:translateY(6px) scale(.5)}18%{opacity:1}100%{opacity:0;transform:translateY(-96px) scale(1.25)}}
@@ -178,6 +180,7 @@
       <button class="btn good" id="gradeGood">😊 맞혔어요!</button>
     </div>
     <button class="btn primary full hide" id="nextBtn" style="margin-top:13px">다음 →</button>
+    <button class="homelink" id="quizHome">← 홈으로 가기</button>
   </div>
 
   <!-- ===== RESULT ===== -->
@@ -193,7 +196,7 @@
     <div class="wronglist" id="wronglist"></div>
   </div>
 
-  <div class="footer">작품명·작가명·핵심 내용 빈칸 채우기</div>
+  <div class="footer">딸 기말고사 화이팅! 💚 · 작품명·작가명·핵심 내용 빈칸 채우기</div>
 </div>
 
 <script>
@@ -691,6 +694,7 @@ $('retryWrong').onclick=()=>{
 };
 function goHome(){ hideAll('result','quiz'); showAll('setup'); renderSetup(); }
 $('home').onclick=goHome;
+$('quizHome').onclick=goHome;
 
 renderSetup();
 </script>
